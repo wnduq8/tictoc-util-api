@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common'
+import { Body, Controller, Get, Post, UseGuards, UseInterceptors } from '@nestjs/common'
 import { UsersService } from './users.service'
 import { AdditionalInfoSignUpDto, EmailSignUpDto } from './dto/users.request.dto'
 import { GoogleLoginRequestDto, LoginRequestDto } from '../auth/dto/login.request.dto'
@@ -6,6 +6,7 @@ import { CurrentUserResponseDto } from './dto/users.response.dto'
 import { AuthService } from '../auth/auth.service'
 import { jwtAuthGuard } from '../auth/jwt/jwt.guard'
 import { CurrentUser } from '../common/decorators/current-user.decorator'
+import { CheckEmailInterceptor } from '../common/interceptors/check-email.interceptor'
 
 @Controller('users')
 export class UsersController {
@@ -17,6 +18,7 @@ export class UsersController {
     return currentUser
   }
 
+  @UseInterceptors(CheckEmailInterceptor)
   @Post('signup/email')
   async emailSignUp(@Body() body: EmailSignUpDto) {
     return this.usersService.registerEmailUser(body)
@@ -27,6 +29,7 @@ export class UsersController {
     return this.authService.jwtLogIn(body)
   }
 
+  @UseInterceptors(CheckEmailInterceptor)
   @Post('signin/google')
   async googleLogin(@Body() { credential }: GoogleLoginRequestDto) {
     const { email, isGoogle } = await this.usersService.registerGoogleUser(credential)
