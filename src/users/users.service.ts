@@ -5,6 +5,7 @@ import { ExceptionCode } from '../common/constants/exception'
 import * as bcrypt from 'bcrypt'
 import jwtDecode from 'jwt-decode'
 import { UserEntity } from '../domain/user.entity'
+import { validate } from '../utils/validate'
 
 @Injectable()
 export class UsersService {
@@ -26,7 +27,7 @@ export class UsersService {
 
   async registerGoogleUser(credential: string) {
     const profile: any = jwtDecode(credential)
-    if (!profile) {
+    if (!profile || validate.tictocEmail(profile.email) === false) {
       throw new HttpException(ExceptionCode.invalidUserInfo, 403)
     }
 

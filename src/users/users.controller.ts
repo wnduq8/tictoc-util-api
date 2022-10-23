@@ -29,7 +29,6 @@ export class UsersController {
     return this.authService.jwtLogIn(body)
   }
 
-  @UseInterceptors(CheckEmailInterceptor)
   @Post('signin/google')
   async googleLogin(@Body() { credential }: GoogleLoginRequestDto) {
     const { email, isGoogle } = await this.usersService.registerGoogleUser(credential)
