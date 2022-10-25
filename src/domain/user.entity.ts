@@ -1,7 +1,9 @@
-import { Entity, Column } from 'typeorm'
+import { Entity, Column, Index, OneToMany } from 'typeorm'
 import { CommonEntity } from '../common/entities/common.entity'
 import { IsBoolean, IsEmail, IsNotEmpty, IsOptional, IsString } from 'class-validator'
+import { ReservationEntity } from './reservation.entity'
 
+@Index('email', ['email'], { unique: true })
 @Entity('user', { schema: 'atictoc_DB' })
 export class UserEntity extends CommonEntity {
   @IsEmail()
@@ -31,7 +33,7 @@ export class UserEntity extends CommonEntity {
 
   @IsString()
   @IsOptional()
-  @Column('varchar', { name: 'profile_image', nullable: true, length: 200 })
+  @Column('varchar', { name: 'profileImage', nullable: true, length: 200 })
   profileImage?: string | null
 
   @IsBoolean()
@@ -46,4 +48,7 @@ export class UserEntity extends CommonEntity {
 
   @Column('varchar', { name: 'status', length: 5, default: 'N' })
   status: string
+
+  @OneToMany(() => ReservationEntity, (reservation) => reservation.User)
+  Reservations: ReservationEntity[]
 }
