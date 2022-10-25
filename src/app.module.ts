@@ -4,6 +4,7 @@ import { ormConfig } from './orm.config'
 import { ConfigModule } from '@nestjs/config'
 import { UsersModule } from './users/users.module'
 import { AuthModule } from './auth/auth.module'
+import { ReservationModule } from './reservation/reservation.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { AuthModule } from './auth/auth.module'
     TypeOrmModule.forRootAsync({ useFactory: ormConfig }),
     UsersModule,
     AuthModule,
+    ReservationModule,
   ],
   controllers: [],
   providers: [],

@@ -1,6 +1,6 @@
 import { Entity, Column, Index, ManyToOne, JoinColumn } from 'typeorm'
 import { CommonEntity } from '../common/entities/common.entity'
-import { IsNotEmpty, IsOptional, IsString } from 'class-validator'
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator'
 import { UserEntity } from './user.entity'
 import { RoomEntity } from './room.entity'
 
@@ -19,22 +19,26 @@ export class ReservationEntity extends CommonEntity {
 
   @IsString()
   @IsNotEmpty()
-  @Column('date', { name: 'reservation_date' })
+  @Column('date', { name: 'reservationDate' })
   reservationDate: string
 
   @IsString()
   @IsNotEmpty()
-  @Column('time', { name: 'start_time' })
+  @Column('time', { name: 'startTime' })
   startTime: string
 
   @IsString()
   @IsNotEmpty()
-  @Column('time', { name: 'end_time' })
+  @Column('time', { name: 'endTime' })
   endTime: string
 
+  @IsNumber()
+  @IsNotEmpty()
   @Column('bigint', { name: 'userId' })
   userId: number
 
+  @IsNumber()
+  @IsNotEmpty()
   @Column('bigint', { name: 'roomId' })
   roomId: number
 

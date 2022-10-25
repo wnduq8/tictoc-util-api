@@ -11,7 +11,7 @@ async function bootstrap() {
   app.useGlobalInterceptors(new SuccessInterceptor())
 
   app.enableCors({
-    origin: 'http://localhost:3000',
+    origin: ['http://localhost:3000'],
     credentials: true,
   })
   await app.listen(8080)
