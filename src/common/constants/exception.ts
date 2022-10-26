@@ -6,4 +6,5 @@ export enum ExceptionCode {
   reservationInvalidCreateExist = 'reservationInvalidCreateExist',
   reservationInvalidDelete = 'reservationInvalidDelete',
   reservationInvalidDeleteTime = 'reservationInvalidDeleteTime',
+  roomInvalidNotExist = 'roomInvalidNotExist',
 }

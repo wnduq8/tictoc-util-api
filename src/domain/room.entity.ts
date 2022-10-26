@@ -25,6 +25,11 @@ export class RoomEntity extends CommonEntity {
   @Column('int', { name: 'maxHeadCount' })
   maxHeadCount: number
 
+  @IsNumber()
+  @IsNotEmpty()
+  @Column('int', { name: 'displayOrder', unique: true })
+  displayOrder: number
+
   @IsString()
   @Column('varchar', { name: 'status', length: 5, default: 'N' })
   status: string

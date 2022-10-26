@@ -1,7 +1,7 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Req, UseGuards } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Req, UseGuards } from '@nestjs/common'
 import { ReservationService } from './reservation.service'
 import { jwtAuthGuard } from '../auth/jwt/jwt.guard'
-import { CreateReservationDto, ReservationByDateDto } from './dto/reservation.request.dto'
+import { CreateReservationDto, CreateRoomDto, ReservationByDateDto, UpdateRoomDto } from './dto/reservation.request.dto'
 
 @UseGuards(jwtAuthGuard)
 @Controller('reservation')
@@ -11,6 +11,21 @@ export class ReservationController {
   @Get('user')
   async getReservationByUser(@Req() req) {
     return await this.reservationService.getReservationByUser(req.user.id)
+  }
+
+  @Get('rooms')
+  async getReservationRooms() {
+    return await this.reservationService.getReservationRooms()
+  }
+
+  @Post('room')
+  async createRoom(@Body() body: CreateRoomDto) {
+    return await this.reservationService.createRoom(body)
+  }
+
+  @Patch('room')
+  async updateRoom(@Body() body: UpdateRoomDto) {
+    return await this.reservationService.updateRoom(body)
   }
 
   @Post('date')

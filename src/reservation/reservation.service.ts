@@ -1,5 +1,5 @@
 import { HttpException, Injectable } from '@nestjs/common'
-import { CreateReservationDto } from './dto/reservation.request.dto'
+import { CreateReservationDto, CreateRoomDto, UpdateRoomDto } from './dto/reservation.request.dto'
 import { ReservationRepository } from './reservation.repository'
 import { ReservationEntity } from '../domain/reservation.entity'
 import { ExceptionCode } from '../common/constants/exception'
@@ -7,12 +7,15 @@ import { format, utcToZonedTime } from 'date-fns-tz'
 import { subMinutes } from 'date-fns'
 import { timeZone } from '../common/constants/date'
 import { UsersRepository } from '../users/users.repository'
+import { RoomsRepository } from './rooms.repository'
+import { RoomEntity } from '../domain/room.entity'
 
 @Injectable()
 export class ReservationService {
   constructor(
     private readonly reservationRepository: ReservationRepository,
     private readonly userRepository: UsersRepository,
+    private readonly roomRepository: RoomsRepository,
   ) {}
 
   async createReservation(data: CreateReservationDto, userId: number) {
@@ -69,5 +72,29 @@ export class ReservationService {
 
   async getReservationByUser(userId: number) {
     return await this.userRepository.getReservationByUserId(userId)
+  }
+
+  async getReservationRooms() {
+    return this.roomRepository.getAll()
+  }
+
+  async createRoom(data: CreateRoomDto) {
+    const room = new RoomEntity()
+    room.name = data.name
+    room.floor = data?.floor || null
+    room.minHeadCount = data.minHeadCount
+    room.maxHeadCount = data.maxHeadCount
+    room.displayOrder = data.displayOrder
+    room.status = data.status
+
+    return await this.roomRepository.save(room)
+  }
+
+  async updateRoom(data: UpdateRoomDto) {
+    const room = await this.roomRepository.findOneById(data.id)
+    if (!room) {
+      throw new HttpException(ExceptionCode.roomInvalidNotExist, 403)
+    }
+    return await this.roomRepository.update(data)
   }
 }
