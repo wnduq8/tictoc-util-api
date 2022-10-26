@@ -1,12 +1,22 @@
-import { Body, Controller, Delete, Param, ParseIntPipe, Post, Req, UseGuards } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Req, UseGuards } from '@nestjs/common'
 import { ReservationService } from './reservation.service'
 import { jwtAuthGuard } from '../auth/jwt/jwt.guard'
-import { CreateReservationDto } from './dto/reservation.request.dto'
+import { CreateReservationDto, ReservationByDateDto } from './dto/reservation.request.dto'
 
 @UseGuards(jwtAuthGuard)
 @Controller('reservation')
 export class ReservationController {
   constructor(private readonly reservationService: ReservationService) {}
+
+  @Get('user')
+  async getReservationByUser(@Req() req) {
+    return await this.reservationService.getReservationByUser(req.user.id)
+  }
+
+  @Post('date')
+  async getReservationByDate(@Body() body: ReservationByDateDto) {
+    return await this.reservationService.getReservationByDate(body.date)
+  }
 
   @Post()
   async createReservation(@Req() req, @Body() body: CreateReservationDto) {

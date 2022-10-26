@@ -55,4 +55,64 @@ export class ReservationRepository {
       throw new InternalServerErrorException('A database query error has occurred.')
     }
   }
+
+  async getReservationByDate(date) {
+    try {
+      return this.repository
+        .createQueryBuilder('r')
+        .innerJoin('r.User', 'ru')
+        .innerJoin('r.Room', 'rr')
+        .select([
+          'r',
+          'rr',
+          'ru.id',
+          'ru.name',
+          'ru.deletedAt',
+          'ru.email',
+          'ru.phone',
+          'ru.department',
+          'ru.status',
+          'ru.profileImage',
+        ])
+        .where('r.reservationDate = :date', { date })
+        .orderBy('r.startTime', 'ASC')
+        .getMany()
+    } catch (e) {
+      throw new InternalServerErrorException('A database query error has occurred.')
+    }
+  }
+
+  // 어드민용
+  async getAllReservation(offset, limit) {
+    try {
+      return this.repository
+        .createQueryBuilder('r')
+        .withDeleted()
+        .innerJoin('r.User', 'ru')
+        .innerJoin('r.Room', 'rr')
+        .select([
+          'r',
+          'rr',
+          'ru.id',
+          'ru.createAt',
+          'ru.updatedAt',
+          'ru.isGoogle',
+          'ru.isAdmin',
+          'ru.name',
+          'ru.deletedAt',
+          'ru.email',
+          'ru.phone',
+          'ru.department',
+          'ru.status',
+          'ru.profileImage',
+        ])
+        .orderBy('r.reservationDate', 'DESC')
+        .addOrderBy('r.startTime', 'ASC')
+        .take(limit)
+        .skip(limit * (offset - 1))
+        .getMany()
+    } catch (e) {
+      throw new InternalServerErrorException('A database query error has occurred.')
+    }
+  }
 }

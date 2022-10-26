@@ -49,4 +49,19 @@ export class UsersRepository {
       throw new InternalServerErrorException('A database query error has occurred.')
     }
   }
+
+  async getReservationByUserId(userId: number) {
+    try {
+      return this.repository
+        .createQueryBuilder('u')
+        .withDeleted()
+        .leftJoin('u.Reservations', 'ur')
+        .select(['ur', 'u.id', 'u.name', 'u.email', 'u.department', 'isAdmin', 'u.status'])
+        .orderBy('ur.reservationDate', 'DESC')
+        .addOrderBy('ur.startTime', 'ASC')
+        .getMany()
+    } catch (e) {
+      throw new InternalServerErrorException('A database query error has occurred.')
+    }
+  }
 }

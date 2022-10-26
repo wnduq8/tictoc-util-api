@@ -6,10 +6,14 @@ import { ExceptionCode } from '../common/constants/exception'
 import { format, utcToZonedTime } from 'date-fns-tz'
 import { subMinutes } from 'date-fns'
 import { timeZone } from '../common/constants/date'
+import { UsersRepository } from '../users/users.repository'
 
 @Injectable()
 export class ReservationService {
-  constructor(private readonly reservationRepository: ReservationRepository) {}
+  constructor(
+    private readonly reservationRepository: ReservationRepository,
+    private readonly userRepository: UsersRepository,
+  ) {}
 
   async createReservation(data: CreateReservationDto, userId: number) {
     const now = format(utcToZonedTime(new Date(), timeZone), 'yyyy-MM-dd HH:mm:SS')
@@ -56,5 +60,14 @@ export class ReservationService {
     }
 
     return await this.reservationRepository.softDelete(reservationId)
+  }
+
+  async getReservationByDate(date: Date) {
+    const onlyDate = format(utcToZonedTime(new Date(date), timeZone), 'yyyy-MM-dd')
+    return await this.reservationRepository.getReservationByDate(onlyDate)
+  }
+
+  async getReservationByUser(userId: number) {
+    return await this.userRepository.getReservationByUserId(userId)
   }
 }
