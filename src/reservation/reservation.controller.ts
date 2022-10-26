@@ -1,7 +1,20 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Req, UseGuards } from '@nestjs/common'
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+  Req,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common'
 import { ReservationService } from './reservation.service'
 import { jwtAuthGuard } from '../auth/jwt/jwt.guard'
 import { CreateReservationDto, CreateRoomDto, ReservationByDateDto, UpdateRoomDto } from './dto/reservation.request.dto'
+import { OnlyAdminInterceptor } from '../common/interceptors/only-admin.interceptor'
 
 @UseGuards(jwtAuthGuard)
 @Controller('reservation')
@@ -18,11 +31,21 @@ export class ReservationController {
     return await this.reservationService.getReservationRooms()
   }
 
+  // 어드민
+  @UseInterceptors(OnlyAdminInterceptor)
+  @Get('rooms/admin')
+  async getAdminReservationRooms() {
+    return await this.reservationService.getAdminReservationRooms()
+  }
+  // 어드민
+  @UseInterceptors(OnlyAdminInterceptor)
   @Post('room')
   async createRoom(@Body() body: CreateRoomDto) {
     return await this.reservationService.createRoom(body)
   }
 
+  // 어드민
+  @UseInterceptors(OnlyAdminInterceptor)
   @Patch('room')
   async updateRoom(@Body() body: UpdateRoomDto) {
     return await this.reservationService.updateRoom(body)

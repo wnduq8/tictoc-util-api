@@ -60,4 +60,12 @@ export class RoomsRepository {
       throw new InternalServerErrorException('A database query error has occurred.')
     }
   }
+
+  async getAllForAdmin() {
+    try {
+      return this.repository.find({ withDeleted: true })
+    } catch (e) {
+      throw new InternalServerErrorException('A database query error has occurred.')
+    }
+  }
 }

@@ -97,4 +97,8 @@ export class ReservationService {
     }
     return await this.roomRepository.update(data)
   }
+
+  async getAdminReservationRooms() {
+    return this.roomRepository.getAllForAdmin()
+  }
 }
