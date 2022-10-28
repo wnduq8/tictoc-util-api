@@ -11,7 +11,7 @@ export class ReservationRepository {
     private readonly repository: Repository<ReservationEntity>,
   ) {}
 
-  async checkCreateInvalid(data: CreateReservationDto): Promise<boolean> {
+  async checkExistInvalid(data: CreateReservationDto): Promise<boolean> {
     // 해당 시간에 이미 예약이 있는 경우
     try {
       const count = await this.repository

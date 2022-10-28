@@ -27,7 +27,7 @@ export class RoomEntity extends CommonEntity {
 
   @IsNumber()
   @IsNotEmpty()
-  @Column('int', { name: 'displayOrder', unique: true })
+  @Column('int', { name: 'displayOrder' })
   displayOrder: number
 
   @IsString()

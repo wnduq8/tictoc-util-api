@@ -24,9 +24,9 @@ export class ReservationService {
       throw new HttpException(ExceptionCode.reservationInvalidCreateTime, 403)
     }
 
-    const isInvalid = await this.reservationRepository.checkCreateInvalid(data)
+    const isExistInvalid = await this.reservationRepository.checkExistInvalid(data)
 
-    if (isInvalid) {
+    if (isExistInvalid) {
       throw new HttpException(ExceptionCode.reservationInvalidCreateExist, 403)
     }
 
