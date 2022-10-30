@@ -63,7 +63,12 @@ export class RoomsRepository {
 
   async getAllForAdmin() {
     try {
-      return this.repository.find({ withDeleted: true })
+      return this.repository.find({
+        withDeleted: true,
+        order: {
+          displayOrder: 'ASC',
+        },
+      })
     } catch (e) {
       throw new InternalServerErrorException('A database query error has occurred.')
     }
