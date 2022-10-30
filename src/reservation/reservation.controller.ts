@@ -33,20 +33,20 @@ export class ReservationController {
 
   // 어드민
   @UseInterceptors(OnlyAdminInterceptor)
-  @Get('rooms/admin')
+  @Get('admin/rooms')
   async getAdminReservationRooms() {
     return await this.reservationService.getAdminReservationRooms()
   }
   // 어드민
   @UseInterceptors(OnlyAdminInterceptor)
-  @Post('room')
+  @Post('admin/room')
   async createRoom(@Body() body: CreateRoomDto) {
     return await this.reservationService.createRoom(body)
   }
 
   // 어드민
   @UseInterceptors(OnlyAdminInterceptor)
-  @Patch('room')
+  @Patch('admin/room')
   async updateRoom(@Body() body: UpdateRoomDto) {
     return await this.reservationService.updateRoom(body)
   }

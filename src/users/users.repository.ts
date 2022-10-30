@@ -59,7 +59,7 @@ export class UsersRepository {
         .select(['ur', 'u.id', 'u.name', 'u.email', 'u.department', 'isAdmin', 'u.status'])
         .orderBy('ur.reservationDate', 'DESC')
         .addOrderBy('ur.startTime', 'ASC')
-        .getMany()
+        .getOne()
     } catch (e) {
       throw new InternalServerErrorException('A database query error has occurred.')
     }

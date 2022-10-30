@@ -9,7 +9,7 @@ import { RoomEntity } from './room.entity'
 export class ReservationEntity extends CommonEntity {
   @IsString()
   @IsNotEmpty()
-  @Column('varchar', { name: 'name', length: 200 })
+  @Column('varchar', { name: 'name', length: 100 })
   name: string
 
   @IsString()

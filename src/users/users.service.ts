@@ -27,6 +27,7 @@ export class UsersService {
 
   async registerGoogleUser(credential: string) {
     const profile: any = jwtDecode(credential)
+
     if (!profile || validate.tictocEmail(profile.email) === false) {
       throw new HttpException(ExceptionCode.invalidUserInfo, 403)
     }

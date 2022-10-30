@@ -7,6 +7,7 @@ export class OnlyAdminInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const request = context.switchToHttp().getRequest()
     const user = request.user
+
     if (user && user.isAdmin) {
       return next.handle().pipe(map((data) => data))
     } else {

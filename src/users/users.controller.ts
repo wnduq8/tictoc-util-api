@@ -7,6 +7,7 @@ import { AuthService } from '../auth/auth.service'
 import { jwtAuthGuard } from '../auth/jwt/jwt.guard'
 import { CurrentUser } from '../common/decorators/current-user.decorator'
 import { CheckEmailInterceptor } from '../common/interceptors/check-email.interceptor'
+import { OnlyAdminInterceptor } from '../common/interceptors/only-admin.interceptor'
 
 @Controller('users')
 export class UsersController {
@@ -18,8 +19,10 @@ export class UsersController {
     return currentUser
   }
 
-  @UseInterceptors(CheckEmailInterceptor)
-  @Post('signup/email')
+  // 어드민
+  @UseGuards(jwtAuthGuard)
+  @UseInterceptors(OnlyAdminInterceptor, CheckEmailInterceptor)
+  @Post('admin/signup/email')
   async emailSignUp(@Body() body: EmailSignUpDto) {
     return this.usersService.registerEmailUser(body)
   }
