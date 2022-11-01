@@ -11,10 +11,12 @@ async function bootstrap() {
   app.useGlobalInterceptors(new SuccessInterceptor())
 
   app.enableCors({
-    origin: ['http://localhost:3000'],
+    origin: process.env.CORS_ORIGIN_LIST
+      ? process.env.CORS_ORIGIN_LIST.split(',').map((origin) => origin.trim())
+      : ['http://localhost:3000'],
     credentials: true,
   })
-  await app.listen(8080)
+  await app.listen(process.env.PORT)
 }
 
 bootstrap()
