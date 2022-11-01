@@ -10,10 +10,7 @@ async function bootstrap() {
   app.useGlobalFilters(new HttpExceptionFilter())
   app.useGlobalInterceptors(new SuccessInterceptor())
 
-  app.enableCors({
-    origin: 'https://tictoc-util-front.vercel.app',
-    credentials: true,
-  })
+  app.enableCors()
   await app.listen(process.env.PORT)
 }
 
