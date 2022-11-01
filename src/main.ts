@@ -11,9 +11,7 @@ async function bootstrap() {
   app.useGlobalInterceptors(new SuccessInterceptor())
 
   app.enableCors({
-    origin: process.env.CORS_ORIGIN_LIST
-      ? process.env.CORS_ORIGIN_LIST.split(',').map((origin) => origin.trim())
-      : ['http://localhost:3000'],
+    origin: 'https://tictoc-util-front.vercel.app',
     credentials: true,
   })
   await app.listen(process.env.PORT)
