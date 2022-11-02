@@ -53,12 +53,12 @@ export class ReservationService {
     }
 
     const now = format(utcToZonedTime(new Date(), timeZone), 'yyyy-MM-dd HH:mm:SS')
-    const subDate = format(
-      subMinutes(new Date(`${reservation.reservationDate} ${reservation.startTime}`), 10),
+    const targetDate = format(
+      utcToZonedTime(new Date(`${reservation.reservationDate} ${reservation.startTime}`), timeZone),
       'yyyy-MM-dd HH:mm:SS',
     )
 
-    if (new Date(now).getTime() > new Date(subDate).getTime()) {
+    if (new Date(now).getTime() > new Date(targetDate).getTime()) {
       throw new HttpException(ExceptionCode.reservationInvalidDeleteTime, 403)
     }
 
