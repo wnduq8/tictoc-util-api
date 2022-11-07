@@ -70,8 +70,20 @@ export class ReservationService {
     return await this.reservationRepository.getReservationByDate(onlyDate)
   }
 
-  async getReservationByUser(userId: number) {
-    return await this.userRepository.getReservationByUserId(userId)
+  async getReservationByUser(userId: number, offset: number, limit: number) {
+    const reservationPaging = await this.reservationRepository.getReservationPaging(userId, offset, limit)
+    if (!reservationPaging.length) {
+      const { id, email, name, department, status } = await this.userRepository.findOneById(userId)
+      return {
+        id,
+        email,
+        name,
+        department,
+        status,
+        Reservations: [],
+      }
+    }
+    return await this.userRepository.getReservationByUserId(userId, reservationPaging)
   }
 
   async getReservationRooms() {

@@ -82,6 +82,23 @@ export class ReservationRepository {
     }
   }
 
+  async getReservationPaging(userId: number, offset: number, limit: number) {
+    try {
+      return this.repository
+        .createQueryBuilder('r')
+        .withDeleted()
+        .where('r.userId = :id', { id: userId })
+        .orderBy('r.reservationDate', 'DESC')
+        .addOrderBy('r.startTime', 'ASC')
+        .addOrderBy('r.id', 'DESC')
+        .skip(offset)
+        .take(limit)
+        .getMany()
+    } catch (e) {
+      throw new InternalServerErrorException('A database query error has occurred.')
+    }
+  }
+
   // 어드민용
   async getAllReservation(offset, limit) {
     try {

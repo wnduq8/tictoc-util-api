@@ -1,5 +1,5 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common'
-import { Repository } from 'typeorm'
+import { Repository, In } from 'typeorm'
 import { UserEntity } from '../domain/user.entity'
 import { InjectRepository } from '@nestjs/typeorm'
 
@@ -50,15 +50,17 @@ export class UsersRepository {
     }
   }
 
-  async getReservationByUserId(userId: number) {
+  async getReservationByUserId(userId: number, reservationPaging: any) {
     try {
       return this.repository
         .createQueryBuilder('u')
         .withDeleted()
         .leftJoin('u.Reservations', 'ur')
         .select(['ur', 'u.id', 'u.name', 'u.email', 'u.department', 'isAdmin', 'u.status'])
+        .where('ur.id IN (:id)', { id: reservationPaging.map(({ id }) => id) })
         .orderBy('ur.reservationDate', 'DESC')
         .addOrderBy('ur.startTime', 'ASC')
+        .addOrderBy('ur.id', 'DESC')
         .getOne()
     } catch (e) {
       throw new InternalServerErrorException('A database query error has occurred.')

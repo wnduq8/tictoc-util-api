@@ -7,6 +7,7 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Query,
   Req,
   UseGuards,
   UseInterceptors,
@@ -15,6 +16,7 @@ import { ReservationService } from './reservation.service'
 import { jwtAuthGuard } from '../auth/jwt/jwt.guard'
 import { CreateReservationDto, CreateRoomDto, ReservationByDateDto, UpdateRoomDto } from './dto/reservation.request.dto'
 import { OnlyAdminInterceptor } from '../common/interceptors/only-admin.interceptor'
+import { PagingQuery } from '../common/dto/response.dto'
 
 @UseGuards(jwtAuthGuard)
 @Controller('reservation')
@@ -22,8 +24,9 @@ export class ReservationController {
   constructor(private readonly reservationService: ReservationService) {}
 
   @Get('user')
-  async getReservationByUser(@Req() req) {
-    return await this.reservationService.getReservationByUser(req.user.id)
+  async getReservationByUser(@Req() req, @Query() query: PagingQuery) {
+    const { offset = 0, limit = 20 } = query
+    return await this.reservationService.getReservationByUser(req.user.id, offset, limit)
   }
 
   @Get('rooms')
