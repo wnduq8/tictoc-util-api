@@ -132,4 +132,12 @@ export class ReservationRepository {
       throw new InternalServerErrorException('A database query error has occurred.')
     }
   }
+
+  async getAllCountReservationByUserId(userId: number) {
+    try {
+      return this.repository.createQueryBuilder('r').withDeleted().where('userId = :userId', { userId }).getCount()
+    } catch (e) {
+      throw new InternalServerErrorException('A database query error has occurred.')
+    }
+  }
 }

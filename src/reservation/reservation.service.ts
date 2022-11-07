@@ -4,7 +4,6 @@ import { ReservationRepository } from './reservation.repository'
 import { ReservationEntity } from '../domain/reservation.entity'
 import { ExceptionCode } from '../common/constants/exception'
 import { format, utcToZonedTime } from 'date-fns-tz'
-import { subMinutes } from 'date-fns'
 import { timeZone } from '../common/constants/date'
 import { UsersRepository } from '../users/users.repository'
 import { RoomsRepository } from './rooms.repository'
@@ -75,15 +74,23 @@ export class ReservationService {
     if (!reservationPaging.length) {
       const { id, email, name, department, status } = await this.userRepository.findOneById(userId)
       return {
-        id,
-        email,
-        name,
-        department,
-        status,
-        Reservations: [],
+        totalCount: 0,
+        data: {
+          id,
+          email,
+          name,
+          department,
+          status,
+          Reservations: [],
+        },
       }
     }
-    return await this.userRepository.getReservationByUserId(userId, reservationPaging)
+    const totalCount = await this.reservationRepository.getAllCountReservationByUserId(userId)
+    const data = await this.userRepository.getReservationByUserId(userId, reservationPaging)
+    return {
+      totalCount,
+      data,
+    }
   }
 
   async getReservationRooms() {

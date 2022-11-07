@@ -106,4 +106,12 @@ export class UsersRepository {
       throw new InternalServerErrorException('A database query error has occurred.')
     }
   }
+
+  async getAllUserCount() {
+    try {
+      return this.repository.createQueryBuilder('u').withDeleted().getCount()
+    } catch (e) {
+      throw new InternalServerErrorException('A database query error has occurred.')
+    }
+  }
 }
