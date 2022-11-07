@@ -126,7 +126,7 @@ export class ReservationRepository {
         .orderBy('r.reservationDate', 'DESC')
         .addOrderBy('r.startTime', 'ASC')
         .take(limit)
-        .skip(limit * (offset - 1))
+        .skip(offset)
         .getMany()
     } catch (e) {
       throw new InternalServerErrorException('A database query error has occurred.')

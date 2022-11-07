@@ -1,4 +1,4 @@
-import { HttpException, Injectable, UnauthorizedException } from '@nestjs/common'
+import { HttpException, Injectable } from '@nestjs/common'
 import { UsersRepository } from './users.repository'
 import { AdditionalInfoSignUpDto, EmailSignUpDto } from './dto/users.request.dto'
 import { ExceptionCode } from '../common/constants/exception'
@@ -60,5 +60,13 @@ export class UsersService {
     }
 
     return await this.usersRepository.update(updateInfo, user.id)
+  }
+
+  async getUsers(offset: number, limit: number) {
+    const users = await this.usersRepository.getUsersInfo(offset, limit)
+    if (!users.length) {
+      return []
+    }
+    return await this.usersRepository.getUsersAllInfo(users)
   }
 }

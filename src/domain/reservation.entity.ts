@@ -1,10 +1,9 @@
-import { Entity, Column, Index, ManyToOne, JoinColumn } from 'typeorm'
+import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm'
 import { CommonEntity } from '../common/entities/common.entity'
 import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator'
 import { UserEntity } from './user.entity'
 import { RoomEntity } from './room.entity'
 
-@Index('userId', ['userId'], {})
 @Entity('reservation', { schema: 'atictoc_DB' })
 export class ReservationEntity extends CommonEntity {
   @IsString()

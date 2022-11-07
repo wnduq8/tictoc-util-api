@@ -26,7 +26,8 @@ export class ReservationController {
   @Get('user')
   async getReservationByUser(@Req() req, @Query() query: PagingQuery) {
     const { offset = 0, limit = 20 } = query
-    return await this.reservationService.getReservationByUser(req.user.id, offset, limit)
+    const convertOffset = offset > 0 ? offset - 1 : offset
+    return await this.reservationService.getReservationByUser(req.user.id, convertOffset, limit)
   }
 
   @Get('rooms')

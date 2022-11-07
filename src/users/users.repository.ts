@@ -2,6 +2,7 @@ import { Injectable, InternalServerErrorException } from '@nestjs/common'
 import { Repository, In } from 'typeorm'
 import { UserEntity } from '../domain/user.entity'
 import { InjectRepository } from '@nestjs/typeorm'
+import { ReservationEntity } from '../domain/reservation.entity'
 
 @Injectable()
 export class UsersRepository {
@@ -50,7 +51,7 @@ export class UsersRepository {
     }
   }
 
-  async getReservationByUserId(userId: number, reservationPaging: any) {
+  async getReservationByUserId(userId: number, reservationPaging: ReservationEntity[]) {
     try {
       return this.repository
         .createQueryBuilder('u')
@@ -62,6 +63,45 @@ export class UsersRepository {
         .addOrderBy('ur.startTime', 'ASC')
         .addOrderBy('ur.id', 'DESC')
         .getOne()
+    } catch (e) {
+      throw new InternalServerErrorException('A database query error has occurred.')
+    }
+  }
+
+  async getUsersInfo(offset: number, limit: number) {
+    try {
+      return this.repository.createQueryBuilder('u').withDeleted().take(limit).skip(offset).getMany()
+    } catch (e) {
+      throw new InternalServerErrorException('A database query error has occurred.')
+    }
+  }
+
+  async getUsersAllInfo(users: UserEntity[]) {
+    try {
+      return this.repository
+        .createQueryBuilder('u')
+        .withDeleted()
+        .leftJoin('u.Reservations', 'ur')
+        .select([
+          'u.id',
+          'u.createAt',
+          'u.deletedAt',
+          'u.email',
+          'u.name',
+          'u.phone',
+          'u.department',
+          'u.profileImage',
+          'u.isGoogle',
+          'u.isAdmin',
+          'u.status',
+          'ur',
+        ])
+        .where('u.id IN (:id)', { id: users.map(({ id }) => id) })
+        .orderBy('u.id', 'ASC')
+        .orderBy('ur.reservationDate', 'DESC')
+        .addOrderBy('ur.startTime', 'ASC')
+        .addOrderBy('ur.id', 'DESC')
+        .getMany()
     } catch (e) {
       throw new InternalServerErrorException('A database query error has occurred.')
     }
