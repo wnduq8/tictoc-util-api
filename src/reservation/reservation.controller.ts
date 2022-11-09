@@ -41,6 +41,16 @@ export class ReservationController {
   async getAdminReservationRooms() {
     return await this.reservationService.getAdminReservationRooms()
   }
+
+  // 어드민
+  @UseInterceptors(OnlyAdminInterceptor)
+  @Get('admin/user/reservation/:id')
+  async getAdminReservationByUser(@Param('id', ParseIntPipe) id, @Query() query: PagingQuery) {
+    const { offset = 0, limit = 20 } = query
+    const convertOffset = offset > 0 ? offset - 1 : offset
+    return await this.reservationService.getAdminReservationByUser(id, convertOffset, limit)
+  }
+
   // 어드민
   @UseInterceptors(OnlyAdminInterceptor)
   @Post('admin/room')

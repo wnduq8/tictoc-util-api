@@ -120,4 +120,8 @@ export class ReservationService {
   async getAdminReservationRooms() {
     return this.roomRepository.getAllForAdmin()
   }
+
+  async getAdminReservationByUser(id: number, offset: number, limit: number) {
+    return this.reservationRepository.getAllReservationByUserId(id, offset, limit)
+  }
 }

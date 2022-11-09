@@ -70,13 +70,31 @@ export class UsersRepository {
 
   async getUsersInfo(offset: number, limit: number) {
     try {
-      return this.repository.createQueryBuilder('u').withDeleted().take(limit).skip(offset).getMany()
+      return this.repository
+        .createQueryBuilder('u')
+        .withDeleted()
+        .select([
+          'u.id',
+          'u.createAt',
+          'u.deletedAt',
+          'u.email',
+          'u.name',
+          'u.phone',
+          'u.department',
+          'u.profileImage',
+          'u.isGoogle',
+          'u.isAdmin',
+          'u.status',
+        ])
+        .take(limit)
+        .skip(offset)
+        .getMany()
     } catch (e) {
       throw new InternalServerErrorException('A database query error has occurred.')
     }
   }
 
-  async getUsersAllInfo(users: UserEntity[]) {
+  async getUsersInfoWithReservations(users: UserEntity[]) {
     try {
       return this.repository
         .createQueryBuilder('u')

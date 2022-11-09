@@ -99,32 +99,17 @@ export class ReservationRepository {
     }
   }
 
-  // 어드민용
-  async getAllReservation(offset, limit) {
+  async getAllReservationByUserId(id, offset, limit) {
     try {
       return this.repository
         .createQueryBuilder('r')
         .withDeleted()
-        .innerJoin('r.User', 'ru')
         .innerJoin('r.Room', 'rr')
-        .select([
-          'r',
-          'rr',
-          'ru.id',
-          'ru.createAt',
-          'ru.updatedAt',
-          'ru.isGoogle',
-          'ru.isAdmin',
-          'ru.name',
-          'ru.deletedAt',
-          'ru.email',
-          'ru.phone',
-          'ru.department',
-          'ru.status',
-          'ru.profileImage',
-        ])
+        .where('r.userId = :id', { id })
+        .select(['r', 'rr'])
         .orderBy('r.reservationDate', 'DESC')
         .addOrderBy('r.startTime', 'ASC')
+        .addOrderBy('r.id', 'DESC')
         .take(limit)
         .skip(offset)
         .getMany()

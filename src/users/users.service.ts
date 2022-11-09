@@ -63,12 +63,8 @@ export class UsersService {
   }
 
   async getUsers(offset: number, limit: number) {
-    const users = await this.usersRepository.getUsersInfo(offset, limit)
-    if (!users.length) {
-      return { totalCount: 0, data: [] }
-    }
+    const data = await this.usersRepository.getUsersInfo(offset, limit)
     const totalCount = await this.usersRepository.getAllUserCount()
-    const data = await this.usersRepository.getUsersAllInfo(users)
     return {
       totalCount,
       data,
