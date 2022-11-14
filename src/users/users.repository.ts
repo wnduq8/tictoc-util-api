@@ -55,7 +55,6 @@ export class UsersRepository {
     try {
       return this.repository
         .createQueryBuilder('u')
-        .withDeleted()
         .leftJoin('u.Reservations', 'ur')
         .select(['ur', 'u.id', 'u.name', 'u.email', 'u.department', 'isAdmin', 'u.status'])
         .where('ur.id IN (:id)', { id: reservationPaging.map(({ id }) => id) })

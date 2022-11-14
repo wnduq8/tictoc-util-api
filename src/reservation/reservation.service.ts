@@ -85,7 +85,7 @@ export class ReservationService {
         },
       }
     }
-    const totalCount = await this.reservationRepository.getAllCountReservationByUserId(userId)
+    const totalCount = await this.reservationRepository.getCountReservationByUserId(userId)
     const data = await this.userRepository.getReservationByUserId(userId, reservationPaging)
     return {
       totalCount,

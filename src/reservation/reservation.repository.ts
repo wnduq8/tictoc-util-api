@@ -86,7 +86,6 @@ export class ReservationRepository {
     try {
       return this.repository
         .createQueryBuilder('r')
-        .withDeleted()
         .where('r.userId = :id', { id: userId })
         .orderBy('r.reservationDate', 'DESC')
         .addOrderBy('r.startTime', 'ASC')
@@ -118,9 +117,9 @@ export class ReservationRepository {
     }
   }
 
-  async getAllCountReservationByUserId(userId: number) {
+  async getCountReservationByUserId(userId: number) {
     try {
-      return this.repository.createQueryBuilder('r').withDeleted().where('userId = :userId', { userId }).getCount()
+      return this.repository.createQueryBuilder('r').where('userId = :userId', { userId }).getCount()
     } catch (e) {
       throw new InternalServerErrorException('A database query error has occurred.')
     }
